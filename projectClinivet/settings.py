@@ -73,6 +73,8 @@ REST_FRAMEWORK = {
     )
 }
 
+AUTH_USER_MODEL = 'appClinivet.User'
+
 ROOT_URLCONF = 'projectClinivet.urls'
 
 TEMPLATES = [
