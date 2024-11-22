@@ -13,6 +13,9 @@ class UserCreateView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
+        user.is_active = True
+        user.save()
+        
         token_data = {
             "username": request.data["username"],
             "password": request.data["password"]

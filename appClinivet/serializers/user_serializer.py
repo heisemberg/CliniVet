@@ -14,8 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'client', 'admin', 'doctor']
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name', 'client', 'admin', 'doctor']
 
     def create(self, validated_data):
         client_data = validated_data.pop('client', None)
@@ -23,28 +22,29 @@ class UserSerializer(serializers.ModelSerializer):
         doctor_data = validated_data.pop('doctor', None)
         
         if admin_data:
-            user = User.objects.create_superuser(
+            userInstance = User.objects.create_superuser(
                 username=validated_data['username'],
                 email=validated_data['email'],
                 first_name=validated_data['first_name'],
                 last_name=validated_data['last_name'],
                 password=validated_data['password']
             )
-            Admin.objects.create(user=user, **admin_data)
+            Admin.objects.create(user=userInstance, **admin_data)
         else:
-            user = User.objects.create_user(
+            userInstance = User.objects.create_user(
                 username=validated_data['username'],
                 email=validated_data['email'],
                 first_name=validated_data['first_name'],
                 last_name=validated_data['last_name'],
                 password=validated_data['password']
             )
+            
             if client_data:
-                Client.objects.create(user=user, **client_data)
+                Client.objects.create(user=userInstance, **client_data)
             if doctor_data:
-                Doctor.objects.create(user=user, **doctor_data)
+                Doctor.objects.create(user=userInstance, **doctor_data)
         
-        return user
+        return userInstance
 
     def update(self, instance, validated_data):
         client_data = validated_data.pop('client', None)

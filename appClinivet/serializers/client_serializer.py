@@ -4,6 +4,6 @@ from ..models.client import Client
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ['phone_number', 'address',  'last_change_date', 'is_active']
+        fields = ['phone_number', 'address']
 
     
