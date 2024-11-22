@@ -1,4 +1,3 @@
-from .user_serializer import UserSerializer
 from .admin_serializer import AdminSerializer
 from .client_serializer import ClientSerializer
 from .pet_serializer import PetSerializer

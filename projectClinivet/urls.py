@@ -17,21 +17,17 @@ Including another URLconf
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views.admin_view import AdminViewSet
-from .views.client_view import ClientViewSet
-from .views.doctor_view import DoctorViewSet
-from .views.pet_view import PetViewSet
-from .views.medical_record_view import MedicalRecordViewSet
-from .views.appointment_view import AppointmentViewSet
-from .views.availability_view import AvailabilityViewSet
-from .views.inventory_item_view import InventoryItemViewSet
-from .views.invoice_view import InvoiceViewSet
+from appClinivet.views.user_view import UserCreateView
+from appClinivet.views.pet_view import PetViewSet
+from appClinivet.views.medical_record_view import MedicalRecordViewSet
+from appClinivet.views.appointment_view import AppointmentViewSet
+from appClinivet.views.availability_view import AvailabilityViewSet
+from appClinivet.views.inventory_item_view import InventoryItemViewSet
+from appClinivet.views.invoice_view import InvoiceViewSet
 
 # Crear el router y registrar las vistas
 router = DefaultRouter()
-router.register(r'admins', AdminViewSet)
-router.register(r'clients', ClientViewSet)
-router.register(r'doctors', DoctorViewSet)
+router.register(r'users', UserCreateView)
 router.register(r'pets', PetViewSet)
 router.register(r'medical_records', MedicalRecordViewSet)
 router.register(r'appointments', AppointmentViewSet)

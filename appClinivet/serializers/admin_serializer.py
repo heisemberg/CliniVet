@@ -4,4 +4,4 @@ from ..models.admin import Admin
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Admin
-        fields = '__all__'
+        fields = [ 'phone_number', 'address','last_change_date', 'is_active']
