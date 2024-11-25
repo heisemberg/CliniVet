@@ -34,3 +34,24 @@ class IsOwnerOrAdmin(permissions.BasePermission):
             return True
         # Only the owner can edit or delete
         return obj.owner == request.user.client
+    
+class IsAdminOrReadOnly(permissions.BasePermission):
+    """
+    Custom permission to only allow admins to edit or delete, but allow read-only access to others.
+    """
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user.is_staff
+
+
+class IsDoctorOrSellerOrAdmin(permissions.BasePermission):
+    """
+    Custom permission to only allow doctors, sellers, or admins to create invoices.
+    """
+    def has_permission(self, request, view):
+        # Allow read-only access to any request
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        # Allow create access to doctors, sellers, and admins
+        return request.user.is_staff or hasattr(request.user, 'doctor') or hasattr(request.user, 'seller')

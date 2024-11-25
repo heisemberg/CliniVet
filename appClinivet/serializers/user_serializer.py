@@ -3,23 +3,30 @@ from ..models.user import User
 from ..models.client import Client
 from ..models.admin import Admin
 from ..models.doctor import Doctor
+from ..models.seller import Seller
 from ..serializers.client_serializer import ClientSerializer
 from ..serializers.admin_serializer import AdminSerializer
 from ..serializers.doctor_serializer import DoctorSerializer
+from ..serializers.seller_serializer import SellerSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     client = ClientSerializer(required=False)
     admin = AdminSerializer(required=False)
     doctor = DoctorSerializer(required=False)
+    seller = SellerSerializer(required=False)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name', 'client', 'admin', 'doctor']
-
+        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name', 'client', 'admin', 'doctor', 'seller']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
+        
     def create(self, validated_data):
         client_data = validated_data.pop('client', None)
         admin_data = validated_data.pop('admin', None)
         doctor_data = validated_data.pop('doctor', None)
+        seller_data = validated_data.pop('seller', None)
         
         if admin_data:
             userInstance = User.objects.create_superuser(
@@ -43,6 +50,8 @@ class UserSerializer(serializers.ModelSerializer):
                 Client.objects.create(user=userInstance, **client_data)
             if doctor_data:
                 Doctor.objects.create(user=userInstance, **doctor_data)
+            if seller_data:
+                Seller.objects.create(user=userInstance, **seller_data)
         
         return userInstance
 
@@ -50,6 +59,7 @@ class UserSerializer(serializers.ModelSerializer):
         client_data = validated_data.pop('client', None)
         admin_data = validated_data.pop('admin', None)
         doctor_data = validated_data.pop('doctor', None)
+        seller_data = validated_data.pop('seller', None)
         
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -70,6 +80,11 @@ class UserSerializer(serializers.ModelSerializer):
             for attr, value in doctor_data.items():
                 setattr(doctor, attr, value)
             doctor.save()
+        if seller_data:
+            seller = instance.seller
+            for attr, value in seller_data.items():
+                setattr(seller, attr, value)
+            seller.save()
         
         return instance
 
@@ -88,4 +103,6 @@ class UserSerializer(serializers.ModelSerializer):
             representation['admin'] = AdminSerializer(user.admin).data
         if hasattr(user, 'doctor'):
             representation['doctor'] = DoctorSerializer(user.doctor).data
+        if hasattr(user, 'seller'):
+            representation['seller'] = SellerSerializer(user.seller).data
         return representation

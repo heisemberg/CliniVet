@@ -1,12 +1,16 @@
 from rest_framework import status, viewsets, serializers
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from ..models.user import User
 from ..serializers.user_serializer import UserSerializer
 
+
 class UserCreateView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
 
     def create(self, request, *args, **kwargs):
         # Imprimir los datos proporcionados en la solicitud

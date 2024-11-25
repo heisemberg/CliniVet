@@ -1,5 +1,6 @@
 from .admin_serializer import AdminSerializer
 from .client_serializer import ClientSerializer
+from .seller_serializer import SellerSerializer
 from .pet_serializer import PetSerializer
 from .medical_record_serializer import MedicalRecordSerializer
 from .appointment_serializer import AppointmentSerializer

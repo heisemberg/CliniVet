@@ -7,6 +7,8 @@ class Invoice(models.Model):
     client = models.ForeignKey(Client, related_name='invoices', on_delete=models.CASCADE)
     date = models.DateTimeField('Date', auto_now_add=True)
     total_amount = models.DecimalField('Total Amount', max_digits=10, decimal_places=2)
+    service_cost = models.DecimalField('Service Cost', max_digits=10, decimal_places=2, default=0.00)  # Nuevo campo
+    exam_cost = models.DecimalField('Exam Cost', max_digits=10, decimal_places=2, default=0.00)  # Nuevo campo
     items = models.ManyToManyField(InventoryItem, through='InvoiceItem')
 
 class InvoiceItem(models.Model):

@@ -1,15 +1,15 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from ..models.appointment import Appointment
 from ..models.availability import Availability
 from ..serializers.appointment_serializer import AppointmentSerializer
-from ..permissions import IsOwnerOrDoctorOrAdmin, IsAdminOrReadOnly
+from ..permissions import IsOwnerOrDoctorOrAdmin
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrDoctorOrAdmin, IsAdminOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrDoctorOrAdmin]
 
     def get_queryset(self):
         user = self.request.user
