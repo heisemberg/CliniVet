@@ -5,3 +5,4 @@ from .appointment_view import AppointmentViewSet
 from .availability_view import AvailabilityViewSet
 from .inventory_item_view import InventoryItemViewSet
 from .invoice_view import InvoiceViewSet
+from .business_view import BusinessCreateView

@@ -9,3 +9,4 @@ from .doctor import Doctor
 from .availability import Availability
 from .inventory_item import InventoryItem
 from .invoice import Invoice, InvoiceItem
+from .business import Business
