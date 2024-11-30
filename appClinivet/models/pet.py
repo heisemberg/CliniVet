@@ -3,6 +3,7 @@ from .client import Client
 from .business import Business
 
 class Pet(models.Model):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField('Name', max_length=100)
     species = models.CharField('Species', max_length=100)
     breed = models.CharField('Breed', max_length=100)

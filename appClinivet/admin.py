@@ -9,6 +9,7 @@ from .models.doctor import Doctor
 from .models.availability import Availability
 from .models.inventory_item import InventoryItem
 from .models.invoice import Invoice, InvoiceItem
+from .models.business import Business
 
 admin.site.register(User)
 admin.site.register(Admin)
@@ -21,6 +22,7 @@ admin.site.register(Availability)
 admin.site.register(InventoryItem)
 admin.site.register(Invoice)
 admin.site.register(InvoiceItem)
+admin.site.register(Business)
 
 
 # Register your models here.

@@ -1,4 +1,5 @@
 from rest_framework import status, viewsets, serializers
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from ..models.user import User
@@ -7,7 +8,17 @@ from ..serializers.user_serializer import UserSerializer
 class UserCreateView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = []  # Permitir acceso sin autenticación para registrar un usuario
+
+    def get_permissions(self):
+        if self.action in ['create']:
+            return []  # Permitir acceso sin autenticación para registrar un usuario
+        return [IsAuthenticated()]  # Requerir autenticación para otras acciones
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return User.objects.filter(business=user.business)
+        return User.objects.filter(id=user.id)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
