@@ -9,3 +9,10 @@ class InventoryItemViewSet(viewsets.ModelViewSet):
     serializer_class = InventoryItemSerializer
     permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
+    def get_queryset(self):
+        user = self.request.user
+        return InventoryItem.objects.filter(business=user.business)
+
+    def perform_create(self, serializer):
+        serializer.save(business=self.request.user.business)
+

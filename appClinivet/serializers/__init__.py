@@ -10,5 +10,6 @@ from .inventory_item_serializer import InventoryItemSerializer
 from .invoice_serializer import InvoiceSerializer, InvoiceItemSerializer
 from .appointment_serializer import AppointmentSerializer
 from .business_serializer import BusinessSerializer
+from .sale_serializer import SaleSerializer
 
 

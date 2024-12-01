@@ -9,6 +9,7 @@ from appClinivet.views.appointment_view import AppointmentViewSet
 from appClinivet.views.availability_view import AvailabilityViewSet
 from appClinivet.views.inventory_item_view import InventoryItemViewSet
 from appClinivet.views.invoice_view import InvoiceViewSet
+from appClinivet.views.sale_view import SaleViewSet
 
 # Crear el router y registrar las vistas
 router = DefaultRouter()
@@ -20,6 +21,7 @@ router.register(r'availabilities', AvailabilityViewSet)
 router.register(r'inventory_items', InventoryItemViewSet)
 router.register(r'invoices', InvoiceViewSet)
 router.register(r'business', BusinessCreateView)
+router.register(r'sales', SaleViewSet)
 
 # Definir las rutas específicas y las rutas generadas por el router
 urlpatterns = [

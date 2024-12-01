@@ -47,7 +47,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
 class IsDoctorOrSellerOrAdmin(permissions.BasePermission):
     """
-    Custom permission to only allow doctors, sellers, or admins to create invoices.
+    Custom permission to only allow doctors, sellers, or admins to create sales.
     """
     def has_permission(self, request, view):
         # Allow read-only access to any request

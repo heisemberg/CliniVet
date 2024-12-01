@@ -11,14 +11,14 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Invoice
-        fields = ['id', 'client', 'total_amount', 'service_cost', 'exam_cost', 'date', 'items']
+        fields = ['id', 'client', 'business', 'user', 'date', 'total_amount', 'service_cost', 'exam_cost', 'items']
 
     def create(self, validated_data):
         items_data = validated_data.pop('items')
-        service_cost = validated_data.get('service_cost', 0)
-        exam_cost = validated_data.get('exam_cost', 0)
-        invoice = Invoice.objects.create(**validated_data)
-        total_amount = service_cost + exam_cost
+        user = self.context['request'].user
+        business = user.business
+        invoice = Invoice.objects.create(user=user, business=business, **validated_data)
+        total_amount = validated_data.get('service_cost', 0) + validated_data.get('exam_cost', 0)
         for item_data in items_data:
             item = InvoiceItem.objects.create(invoice=invoice, **item_data)
             total_amount += item.price * item.quantity
