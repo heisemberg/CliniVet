@@ -1,17 +1,18 @@
 from rest_framework import serializers
-from ..models.invoice import Invoice, InvoiceItem
+from ..models.invoice import Invoice
+from ..models.invoice_item import InvoiceItem
 
 class InvoiceItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvoiceItem
-        fields = '__all__'
+        fields = ['id', 'inventory_item', 'quantity', 'price']
 
 class InvoiceSerializer(serializers.ModelSerializer):
     items = InvoiceItemSerializer(many=True)
 
     class Meta:
         model = Invoice
-        fields = ['id', 'client', 'business', 'user', 'date', 'total_amount', 'service_cost', 'exam_cost', 'items']
+        fields = ['id', 'client', 'business', 'user', 'date', 'total_amount', 'service_cost', 'exam_cost', 'items', 'appointment']
 
     def create(self, validated_data):
         items_data = validated_data.pop('items')
@@ -34,13 +35,16 @@ class InvoiceSerializer(serializers.ModelSerializer):
         instance.date = validated_data.get('date', instance.date)
         instance.save()
 
-        # Clear existing items and add new ones
-        instance.items.clear()
-        total_amount = instance.service_cost + instance.exam_cost
+        # Actualizar los items de la factura
         for item_data in items_data:
-            item = InvoiceItem.objects.create(invoice=instance, **item_data)
-            total_amount += item.price * item.quantity
-        instance.total_amount = total_amount
-        instance.save()
+            item_id = item_data.get('id')
+            if item_id:
+                item = InvoiceItem.objects.get(id=item_id, invoice=instance)
+                item.inventory_item = item_data.get('inventory_item', item.inventory_item)
+                item.quantity = item_data.get('quantity', item.quantity)
+                item.price = item_data.get('price', item.price)
+                item.save()
+            else:
+                InvoiceItem.objects.create(invoice=instance, **item_data)
 
         return instance

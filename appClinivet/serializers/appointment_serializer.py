@@ -5,7 +5,8 @@ from ..models.availability import Availability
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = ['id', 'pet', 'availability', 'reason', 'invoice']
+        fields = ['id', 'pet', 'availability', 'reason', 'invoice', 'status']
+        read_only_fields = ['invoice', 'status']
 
     def create(self, validated_data):
         availability = validated_data.get('availability')
@@ -20,5 +21,10 @@ class AppointmentSerializer(serializers.ModelSerializer):
         availability.is_occupied = True
         availability.save()
         
+        # Crear la cita
         appointment = Appointment.objects.create(**validated_data)
         return appointment
+
+    def update(self, instance, validated_data):
+        # Aquí puedes agregar lógica adicional si es necesario
+        return super().update(instance, validated_data)

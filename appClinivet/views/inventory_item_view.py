@@ -14,5 +14,4 @@ class InventoryItemViewSet(viewsets.ModelViewSet):
         return InventoryItem.objects.filter(business=user.business)
 
     def perform_create(self, serializer):
-        serializer.save(business=self.request.user.business)
-
+        serializer.save()
