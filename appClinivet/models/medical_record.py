@@ -16,7 +16,7 @@ class MedicalRecord(models.Model):
     doctor = models.ForeignKey(Doctor, related_name='medical_records', on_delete=models.CASCADE)
     client = models.ForeignKey(Client, related_name='medical_records', on_delete=models.CASCADE)
     pet = models.ForeignKey(Pet, related_name='medical_records', on_delete=models.CASCADE)
-    appointment = models.ForeignKey(Appointment, related_name='medical_records', on_delete=models.CASCADE)
+    appointment = models.OneToOneField(Appointment, related_name='medical_record', on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Medical Record for {self.pet.name} by {self.doctor.name} on {self.date}"

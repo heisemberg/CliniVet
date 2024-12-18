@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from ..models.invoice import Invoice
-from ..models.invoice_item import InvoiceItem
+from ..models.invoice import Invoice, InvoiceItem
 
 class InvoiceItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,6 +32,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         instance.service_cost = validated_data.get('service_cost', instance.service_cost)
         instance.exam_cost = validated_data.get('exam_cost', instance.exam_cost)
         instance.date = validated_data.get('date', instance.date)
+        instance.appointment = validated_data.get('appointment', instance.appointment)
         instance.save()
 
         # Actualizar los items de la factura
@@ -46,5 +46,12 @@ class InvoiceSerializer(serializers.ModelSerializer):
                 item.save()
             else:
                 InvoiceItem.objects.create(invoice=instance, **item_data)
+
+        # Recalcular el total_amount
+        total_amount = instance.service_cost + instance.exam_cost
+        for item in instance.items.all():
+            total_amount += item.price * item.quantity
+        instance.total_amount = total_amount
+        instance.save()
 
         return instance
